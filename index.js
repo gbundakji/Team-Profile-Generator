@@ -6,31 +6,6 @@ const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const fs = require('fs');
 
-const generateHtml = ({name, role, id, email, github}) =>
-    `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>Team Profile Generator</title>
-</head>
-<header class="backgorund-red">My Team</header>
-<body>
-  <div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">${name}</h1>
-    <h2 class="lead">${role}</h2>
-    <ul class="list-group">
-        <li class="list-group-item">ID: ${id}
-        <li class="list-group-item">GitHub: ${github}</li>
-        <li class="list-group-item">Email: ${email}</li>
-    </ul>
-  </div>
-</div>
-</body>
-</html>`;
-
 inquirer 
     .prompt([
         {
@@ -100,11 +75,111 @@ inquirer
             }
         },
     ])
+
 .then((answers) => {
-    const htmlPageContent = generateHTML(answers);
+    const htmlPageContent = generateHtml(answers);
 
     fs.writeFile('index.html', htmlPageContent, (err) =>
     err ? console.log(err) : console.log('Your index.html has been created successfully!')
     );
 });
 
+// function run() {
+//     let allRoles = [];
+//     const positions = 4;
+//     for (let i = 0; i < positions.length; i++) {
+//         const promise = new Promise((resolved, rejected) => {
+//             runInquirer()
+//             .then(function ({name, role, id, email}) {
+//                 if (title === "Manager") {
+//                     runInquirerManager().then(function ({
+                        
+//                     }))
+//                 }
+//             })
+//         })
+//     }
+// };
+
+
+
+function runInquierer(engineer, intern, manager) {
+    this.engineer = engineer;
+    this.intern = intern;
+    this.manager = manager;
+    this.run = () => {
+        if (title === "Engineer") {
+            return this.engineer;
+        } else if (title === "Intern" ) { 
+            return this.intern;
+        } else if (title === "Manager") {
+            return this.manager
+        };
+    };
+
+};
+
+runInquierer(engineer, intern, manager);
+
+function displayTitle(employee) {
+    if (employee.title === "Manager") {
+        console.log(employee.officeNumber);
+        return `office number: ${employee.officeNumber}`;
+    }
+
+    if (employee.title === "Intern") {
+        return `school: ${employee.school}`;
+    }
+
+    if (employee.title === "Engineer") {
+        return `gitHub: ${employee.github}`;
+    }
+
+};
+
+const generateHtml = ({name, role, id, email, github}) =>
+    `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>Team Profile Generator</title>
+</head>
+<header class="backgorund-red">My Team</header>
+<body>
+<div class="card bg-dark justify-content-center align-items-center" style="width: 18rem;">
+<div class="col card-header">
+    <h4>${employeeArray[i].name}</h4>
+</div>
+<div class="col card-header">
+    <h4>${employeeArray[i].title}</h4 >
+</div >
+<ul class="list-group list-group-flush text">
+    <li class="list-group-item">ID: ${employeeArray[i].id}</li>
+    <li class="list-group-item">Email: ${employeeArray[i].email}</li>
+    <li class="list-group-item"> ${displayTitle(employeeArray[i])}</li>
+</ul>
+</div >
+</div>
+</body>
+</html>`;
+
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+        console.log("Your index.html file has been created successfully! ")
+    });
+};
+
+function init() {
+    inquirer.prompt(questions)
+    .then(function (answers, data) {
+        console.log(answers)
+        writeToFile("index.html", generateMarkdown(answers));
+    });
+};
+
+init();
