@@ -1,5 +1,4 @@
 const inquirer = require('inquirer');
-const jest = require('jest');
 const Employee = require('./lib/Employee');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
@@ -23,11 +22,11 @@ inquirer
         },
         {
             type: 'list',
-            name: 'role',
+            name: 'title',
             message: 'What is your current role in the team?',
             choices: ["Manager", "Engineer", "Intern"], 
-            confirm: role => {
-                if (role) {
+            confirm: title => {
+                if (title) {
                     return true;
                 } else {
                     console.log('Please pick your current team role!');
@@ -61,19 +60,6 @@ inquirer
                 }
             }
         },
-        {
-            type: 'input',
-            name: 'github',
-            message: 'What is your github username?',
-            confirm: github => {
-                if (github) {
-                    return true;
-                } else {
-                    console.log('Please provide us with your github username');
-                    return false;
-                }
-            }
-        },
     ])
 
 .then((answers) => {
@@ -84,102 +70,200 @@ inquirer
     );
 });
 
-// function run() {
-//     let allRoles = [];
-//     const positions = 4;
-//     for (let i = 0; i < positions.length; i++) {
-//         const promise = new Promise((resolved, rejected) => {
-//             runInquirer()
-//             .then(function ({name, role, id, email}) {
-//                 if (title === "Manager") {
-//                     runInquirerManager().then(function ({
-                        
-//                     }))
-//                 }
-//             })
-//         })
-//     }
+
+
+// function runInquirer(engineer, intern, manager) {
+//     this.engineer = engineer;
+//     this.intern = intern;
+//     this.manager = manager;
+//     this.run = () => {
+//         if (title === "Engineer") {
+//             return this.engineer;
+//         } else if (title === "Intern" ) { 
+//             return this.intern;
+//         } else if (title === "Manager") {
+//             return this.manager
+//         };
+//     };
+
 // };
 
 
-
-function runInquierer(engineer, intern, manager) {
-    this.engineer = engineer;
-    this.intern = intern;
-    this.manager = manager;
-    this.run = () => {
-        if (title === "Engineer") {
-            return this.engineer;
-        } else if (title === "Intern" ) { 
-            return this.intern;
-        } else if (title === "Manager") {
-            return this.manager
-        };
-    };
-
+function inquirerManager() {
+    const promptArray = [{
+        type: 'input',
+        name: 'github',
+        message: 'What is your github username?',
+        confirm: github => {
+            if (github) {
+                return true;
+            } else {
+                console.log('Please provide us with your github username');
+                return false;
+            };
+        }   
+    }];
+    return inquirer
+        .prompt(promptArray)
 };
 
-runInquierer(engineer, intern, manager);
+function inquirerManager() {
+    const promptArray = [{
+        type: 'input',
+        name: 'officeNumber',
+        message: 'What is your office number?',
+        confirm: github => {
+            if (github) {
+                return true;
+            } else {
+                console.log('Please provide us with your office number');
+                return false;
+            };
+        }   
+    }];
+    return inquirer
+        .prompt(promptArray)
+};
+
+function inquirerIntern() {
+    const promptArray = [{
+        type: 'input',
+        name: 'school',
+        message: 'What school did you go to?',
+        confirm: github => {
+            if (github) {
+                return true;
+            } else {
+                console.log('Please provide us with your school name');
+                return false;
+            };
+        }   
+    }];
+    return inquirer
+        .prompt(promptArray)
+};
+
+function inquirerEngineer() {
+    const promptArray = [{
+        type: 'input',
+        name: 'github',
+        message: 'What is your github username?',
+        confirm: github => {
+            if (github) {
+                return true;
+            } else {
+                console.log('Please provide us with your github username');
+                return false;
+            };
+        }   
+    }];
+    return inquirer
+        .prompt(promptArray)
+};
+
+function run() {
+    let employees= [];
+    const maxTimes = 4;
+    for (i = 0; i < maxTimes; i++) {
+        const promise = new Promise((resolve, reject) => {
+            runInquirer()
+                .then(function ({ name, id, email, title }) {
+
+                    if (title === "Manager") {
+                        inquirerManager().then(function ({officeNumber}) {
+                            this.employee = new Manager(name, id, email, officeNumber, title);
+                            console.log(officeNumber);
+                            employees.push(employee);
+                            resolve("done");
+                        });
+
+                    } else if (title === "Engineer") {
+                        inquirerEngineer().then(function ({github}) {
+                            this.employee = new Engineer(name, id, email, github, title);
+                            console.log(github);
+                            employees.push(employee);
+                            resolve("done");
+                        });
+                    } else if (title === "Intern") {
+                        inquirerIntern().then(function ({school}) {
+                            this.employee = new Intern(name, id, email, school, title);
+                            console.log(school);
+                            employees.push(employee);
+                            resolve("done");
+                        });
+                    }
+
+                }).catch(function (err) {
+                    console.log("There was an error.");
+                    console.log(err);
+                });
+        });
+        console.log('status of promise: ', promise);
+    }
+    
+};
 
 function displayTitle(employee) {
-    if (employee.title === "Manager") {
-        console.log(employee.officeNumber);
+    if (title === "Manager") {
+        console.log(officeNumber);
         return `office number: ${employee.officeNumber}`;
     }
 
-    if (employee.title === "Intern") {
+    if (title === "Intern") {
         return `school: ${employee.school}`;
     }
 
-    if (employee.title === "Engineer") {
+    if (title === "Engineer") {
         return `gitHub: ${employee.github}`;
     }
 
 };
 
-const generateHtml = ({name, role, id, email, github}) =>
+function getHtml() {
+    const html = "";
+    html += `<div class="card bg-dark justify-content-center align-items-center" style="width: 18rem;">
+        <div class="col card-header">
+            <h4>${employees[i].name}</h4>
+        </div>
+        <div class="col card-header">
+            <h4>${employees[i].title}</h4 >
+        </div >
+        <ul class="list-group list-group-flush text">
+            <li class="list-group-item">ID: ${employees[i].id}</li>
+            <li class="list-group-item">Email: ${employees[i].email}</li>
+            <li class="list-group-item"> ${displayTitle(employees[i])}</li>
+        </ul>
+    </div > `;
+    return html;
+}
+
+const generateHtml = () => {
     `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./dist/style.css"> 
   <title>Team Profile Generator</title>
-</head>
-<header class="backgorund-red">My Team</header>
-<body>
-<div class="card bg-dark justify-content-center align-items-center" style="width: 18rem;">
-<div class="col card-header">
-    <h4>${employeeArray[i].name}</h4>
-</div>
-<div class="col card-header">
-    <h4>${employeeArray[i].title}</h4 >
-</div >
-<ul class="list-group list-group-flush text">
-    <li class="list-group-item">ID: ${employeeArray[i].id}</li>
-    <li class="list-group-item">Email: ${employeeArray[i].email}</li>
-    <li class="list-group-item"> ${displayTitle(employeeArray[i])}</li>
-</ul>
-</div >
-</div>
-</body>
+    </head>
+    </head>
+        <body>
+            <nav class="navbar navbar-dark bg-dark justify-content-center align-items-center">
+                <span class="navbar-brand mb-0 h1">
+                    <h1>My Team</h1>
+                </span>
+            </nav>
+            <div class="row">
+                ${getHtml()}
+            </div>
+        </body>
 </html>`;
 
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) => {
-        if (err) {
-            return console.error(err);
-        }
-        console.log("Your index.html file has been created successfully! ")
-    });
+fs.writeFile('team.html', html, generateHtml, function (err){
+    if (err) console.error(err);
+    console.log('Success!')
+});
 };
 
-function init() {
-    inquirer.prompt(questions)
-    .then(function (answers, data) {
-        console.log(answers)
-        writeToFile("index.html", generateMarkdown(answers));
-    });
-};
-
-init();
+run();
